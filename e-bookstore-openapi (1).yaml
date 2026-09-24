@@ -1,0 +1,515 @@
+openapi: 3.0.3
+info:
+  title: E-Bookstore Capstone API
+  version: 1.0.0
+  description: |
+    API for the capstone book-shopping journey. Physical delivery is assumed because
+    the supplied wireframe includes a delivery address. Payment is simulated for
+    local development; raw card details are never sent to this API.
+servers:
+  - url: http://localhost:8080/api/v1
+tags:
+  - name: Catalogue
+  - name: Cart
+  - name: Checkout
+  - name: Orders
+  - name: Account
+paths:
+  /categories:
+    get:
+      tags: [Catalogue]
+      summary: List book categories
+      operationId: listCategories
+      responses:
+        '200':
+          description: Available categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Category' }
+  /publishers:
+    get:
+      tags: [Catalogue]
+      summary: List publishers used as the catalogue brand filter
+      operationId: listPublishers
+      responses:
+        '200':
+          description: Publishers
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string }
+  /books:
+    get:
+      tags: [Catalogue]
+      summary: Search and filter available books
+      operationId: listBooks
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+          description: Title or author text
+        - name: categoryId
+          in: query
+          schema: { type: integer, format: int64 }
+        - name: publisher
+          in: query
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: size
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        '200':
+          description: Matching books
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BookPage' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /books/{bookId}:
+    get:
+      tags: [Catalogue]
+      summary: Get one book
+      operationId: getBook
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        '200':
+          description: Book details
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Book' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /books/{bookId}/related:
+    get:
+      tags: [Catalogue]
+      summary: List related books
+      operationId: listRelatedBooks
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        '200':
+          description: Related books, excluding the selected book
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Book' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /me:
+    get:
+      tags: [Account]
+      summary: Get the current demo user
+      operationId: getCurrentUser
+      description: Local capstone uses one seeded user. Replace with authenticated identity later.
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+  /me/addresses:
+    get:
+      tags: [Account]
+      summary: List saved delivery addresses
+      operationId: listAddresses
+      responses:
+        '200':
+          description: Saved addresses
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Address' }
+    post:
+      tags: [Account]
+      summary: Save a delivery address
+      operationId: createAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AddressInput' }
+      responses:
+        '201':
+          description: Created address
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Address' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /me/cart:
+    get:
+      tags: [Cart]
+      summary: Get the current cart and backend-calculated total
+      operationId: getCart
+      responses:
+        '200':
+          description: Current cart
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Cart' }
+  /me/cart/items:
+    post:
+      tags: [Cart]
+      summary: Add a book to the cart
+      operationId: addCartItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CartItemInput' }
+      responses:
+        '200':
+          description: Updated cart; existing book quantity is increased
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Cart' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /me/cart/items/{bookId}:
+    put:
+      tags: [Cart]
+      summary: Set the quantity for a cart book
+      operationId: updateCartItem
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/QuantityInput' }
+      responses:
+        '200':
+          description: Updated cart
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Cart' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [Cart]
+      summary: Remove a book from the cart
+      operationId: removeCartItem
+      parameters:
+        - $ref: '#/components/parameters/BookId'
+      responses:
+        '204': { description: Removed }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /me/recommendations:
+    get:
+      tags: [Catalogue]
+      summary: Recommend books based on purchase history
+      operationId: getRecommendations
+      description: Proposed MVP uses categories from prior orders and excludes already purchased books.
+      responses:
+        '200':
+          description: Recommended books; empty when no history exists
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Book' }
+  /me/checkout/quote:
+    post:
+      tags: [Checkout]
+      summary: Calculate an order quote including redeemed points
+      operationId: quoteCheckout
+      description: Uses current server-side cart prices. One gift point equals one currency unit for this sample.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CheckoutSelection' }
+      responses:
+        '200':
+          description: Quote; final total cannot be negative
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckoutQuote' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /me/orders:
+    get:
+      tags: [Orders]
+      summary: List order history
+      operationId: listOrders
+      responses:
+        '200':
+          description: Newest orders first
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Order' }
+    post:
+      tags: [Checkout]
+      summary: Place an order and reserve the selected gift points
+      operationId: placeOrder
+      description: Recalculate totals and validate stock and points in one transaction. Return existing order on retry with the same idempotency key.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CheckoutSelection' }
+      responses:
+        '201':
+          description: Order awaiting payment
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+        '200':
+          description: Existing order for repeated idempotency key
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /me/orders/{orderId}:
+    get:
+      tags: [Orders]
+      summary: Get order and purchase confirmation details
+      operationId: getOrder
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '200':
+          description: Order details; display confirmation when status is PAID
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /me/orders/{orderId}/pay:
+    post:
+      tags: [Checkout]
+      summary: Simulate payment of an existing order
+      operationId: payOrder
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PaymentInput' }
+      responses:
+        '200':
+          description: Payment result; paid orders return the original success result on retry
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PaymentResult' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /me/orders/{orderId}/buy-again:
+    post:
+      tags: [Orders]
+      summary: Add available books from a prior order to the cart
+      operationId: buyAgain
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '200':
+          description: Updated cart, priced using current book prices
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Cart' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/Conflict' }
+components:
+  parameters:
+    BookId:
+      name: bookId
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Unique UUID per checkout or payment attempt; reuse on network retry.
+      schema: { type: string, format: uuid }
+  responses:
+    BadRequest:
+      description: Invalid input
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+    Conflict:
+      description: Insufficient stock, points, or invalid order state
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
+  schemas:
+    Money:
+      type: number
+      format: decimal
+      minimum: 0
+      description: Decimal amount in INR; implement as Java BigDecimal.
+      example: 499.00
+    Category:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+    Book:
+      type: object
+      required: [id, title, author, publisher, categoryId, price, availableStock]
+      properties:
+        id: { type: integer, format: int64 }
+        title: { type: string }
+        author: { type: string }
+        publisher: { type: string }
+        description: { type: string }
+        categoryId: { type: integer, format: int64 }
+        price: { $ref: '#/components/schemas/Money' }
+        coverUrl: { type: string, format: uri }
+        availableStock: { type: integer, minimum: 0 }
+    BookPage:
+      type: object
+      required: [content, page, size, totalElements]
+      properties:
+        content:
+          type: array
+          items: { $ref: '#/components/schemas/Book' }
+        page: { type: integer, minimum: 0 }
+        size: { type: integer, minimum: 1 }
+        totalElements: { type: integer, format: int64, minimum: 0 }
+    User:
+      type: object
+      required: [id, name, email, giftPointsBalance]
+      properties:
+        id: { type: integer, format: int64 }
+        name: { type: string }
+        email: { type: string, format: email }
+        giftPointsBalance: { type: integer, minimum: 0 }
+    AddressInput:
+      type: object
+      required: [recipient, line1, city, state, postalCode]
+      properties:
+        recipient: { type: string, minLength: 1 }
+        line1: { type: string, minLength: 1 }
+        line2: { type: string }
+        city: { type: string, minLength: 1 }
+        state: { type: string, minLength: 1 }
+        postalCode: { type: string, minLength: 1 }
+    Address:
+      allOf:
+        - $ref: '#/components/schemas/AddressInput'
+        - type: object
+          required: [id]
+          properties:
+            id: { type: integer, format: int64 }
+    CartItemInput:
+      type: object
+      required: [bookId, quantity]
+      properties:
+        bookId: { type: integer, format: int64 }
+        quantity: { type: integer, minimum: 1 }
+    QuantityInput:
+      type: object
+      required: [quantity]
+      properties:
+        quantity: { type: integer, minimum: 1 }
+    CartItem:
+      type: object
+      required: [book, quantity, lineTotal]
+      properties:
+        book: { $ref: '#/components/schemas/Book' }
+        quantity: { type: integer, minimum: 1 }
+        lineTotal: { $ref: '#/components/schemas/Money' }
+    Cart:
+      type: object
+      required: [items, subtotal]
+      properties:
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/CartItem' }
+        subtotal: { $ref: '#/components/schemas/Money' }
+    CheckoutSelection:
+      type: object
+      required: [addressId, pointsToRedeem]
+      properties:
+        addressId: { type: integer, format: int64 }
+        pointsToRedeem: { type: integer, minimum: 0 }
+    CheckoutQuote:
+      type: object
+      required: [subtotal, pointsRedeemed, finalTotal]
+      properties:
+        subtotal: { $ref: '#/components/schemas/Money' }
+        pointsRedeemed: { type: integer, minimum: 0 }
+        finalTotal: { $ref: '#/components/schemas/Money' }
+    OrderItem:
+      type: object
+      required: [bookId, title, unitPrice, quantity, lineTotal]
+      properties:
+        bookId: { type: integer, format: int64 }
+        title: { type: string }
+        unitPrice: { $ref: '#/components/schemas/Money' }
+        quantity: { type: integer, minimum: 1 }
+        lineTotal: { $ref: '#/components/schemas/Money' }
+    Order:
+      type: object
+      required: [id, status, items, deliveryAddress, subtotal, pointsRedeemed, finalTotal, createdAt]
+      properties:
+        id: { type: integer, format: int64 }
+        status:
+          type: string
+          enum: [PENDING_PAYMENT, PAID, PAYMENT_FAILED]
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/OrderItem' }
+        deliveryAddress: { $ref: '#/components/schemas/Address' }
+        subtotal: { $ref: '#/components/schemas/Money' }
+        pointsRedeemed: { type: integer, minimum: 0 }
+        finalTotal: { $ref: '#/components/schemas/Money' }
+        createdAt: { type: string, format: date-time }
+    PaymentInput:
+      type: object
+      required: [method, simulateOutcome]
+      description: Test-only payment request. No card number, expiry, or CVV fields.
+      properties:
+        method:
+          type: string
+          enum: [CREDIT_CARD, DEBIT_CARD]
+        simulateOutcome:
+          type: string
+          enum: [APPROVED, DECLINED]
+    PaymentResult:
+      type: object
+      required: [orderId, status, paymentStatus, transactionReference]
+      properties:
+        orderId: { type: integer, format: int64 }
+        status:
+          type: string
+          enum: [PENDING_PAYMENT, PAID, PAYMENT_FAILED]
+        paymentStatus:
+          type: string
+          enum: [APPROVED, DECLINED]
+        transactionReference: { type: string }
+    ApiError:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string }
+        message: { type: string }

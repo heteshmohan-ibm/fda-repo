@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Worm — Floral Pastel Minimalism Bookstore</title>
+  
+  <!-- Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        borderRadius: {
+          'none': '0px',
+          'sm': '0px',
+          DEFAULT: '0px',
+          'md': '0px',
+          'lg': '0px',
+          'xl': '0px',
+          '2xl': '0px',
+          '3xl': '0px',
+          'full': '0px'
+        },
+        extend: {
+          colors: {
+            page: '#FAF8F5',
+            charcoal: {
+              DEFAULT: '#1E2024',
+              900: '#1E2024',
+              800: '#2D3139',
+              700: '#4A4F59',
+              600: '#717786',
+              500: '#8C92A0',
+              300: '#D5D8E0',
+              200: '#E6E9EE',
+              100: '#F1F3F7'
+            },
+            rose: {
+              DEFAULT: '#FF8DA1',
+              banner: '#FF8DA1',
+              light: '#FFF0F3',
+              deep: '#E56D83'
+            },
+            peach: {
+              DEFAULT: '#FFC2BA',
+              panel: '#FFEAE6',
+              soft: '#FFF5F3',
+              border: '#F8B4AB',
+              deep: '#E69E94'
+            },
+            orchid: {
+              DEFAULT: '#FF9CE9',
+              badge: '#FF9CE9',
+              light: '#FFF0FC',
+              deep: '#D676C0'
+            },
+            purple: {
+              DEFAULT: '#AD56C4',
+              accent: '#AD56C4',
+              light: '#F8EFFB',
+              deep: '#74318A',
+              dark: '#5C236E'
+            },
+            cream: {
+              card: '#FFFFFF',
+              border: '#E8E2DC',
+              subtle: '#F5F0EB'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Complementary Styles for 3D Covers, Hydrangea Scrollbar & Transitions -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-[#FAF8F5] text-[#1E2024] font-sans antialiased min-h-screen flex flex-col selection:bg-[#AD56C4] selection:text-white">
+
+  <!-- ═════════════════════════════════════════════════════════════════════
+       1. TOP NAVBAR (Floral Pastel Minimalism)
+  ══════════════════════════════════════════════════════════════════════ -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E8E2DC] shadow-xs">
+    <div class="max-w-[1600px] mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3 cursor-pointer group" onclick="navigateTo('catalogue')">
+        <div class="w-10 h-10 bg-[#74318A] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-xl font-extrabold tracking-tight font-display text-[#1E2024] group-hover:text-[#74318A] transition-colors leading-none">
+            Book Worm
+          </span>
+          <span class="text-[10px] uppercase tracking-widest text-[#74318A] font-bold mt-0.5">Hydrangea Editions</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <button id="nav-catalogue" class="text-sm font-bold text-[#74318A] relative py-1 border-b-2 border-[#AD56C4] transition-colors" onclick="navigateTo('catalogue')">
+          Browse
+        </button>
+        <button id="nav-orders" class="text-sm font-semibold text-[#4A4F59] hover:text-[#74318A] transition-colors relative py-1" onclick="navigateTo('orders')">
+          My Orders
+        </button>
+        <button class="text-sm font-semibold text-[#4A4F59] hover:text-[#74318A] transition-colors py-1" onclick="showToast('Wishlist feature connected to your account', 'info')">
+          My Wishlist
+        </button>
+        <button class="text-sm font-semibold text-[#4A4F59] hover:text-[#74318A] transition-colors py-1" onclick="showToast('Curated verified writers catalog', 'info')">
+          My Writers
+        </button>
+      </nav>
+
+      <!-- Right Actions: Gift Points, Cart, User -->
+      <div class="flex items-center gap-3.5">
+        <!-- Gift Points Pill -->
+        <div class="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFEAE6] border border-[#FFC2BA] text-[#1E2024] text-xs font-bold shadow-xs cursor-pointer hover:bg-[#FFC2BA]/40 transition-colors" onclick="navigateTo('cart')" title="1 Gift Point = ₹1 Discount">
+          <span>🪙</span>
+          <span id="points-display">500</span>
+          <span class="text-[#74318A] font-extrabold">pts</span>
+        </div>
+
+        <!-- Cart Button -->
+        <button class="relative p-2 bg-white border border-[#E8E2DC] text-[#1E2024] hover:border-[#AD56C4] hover:bg-[#FFF5F3] transition-all flex items-center justify-center shadow-xs" onclick="navigateTo('cart')">
+          <svg class="w-5 h-5 text-[#1E2024]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+          <span class="absolute -top-1.5 -right-1.5 bg-[#FF8DA1] text-[#1E2024] text-[10px] font-black w-5 h-5 flex items-center justify-center shadow-xs border border-white" id="cart-badge">
+            0
+          </span>
+        </button>
+
+        <!-- User Profile Pill -->
+        <button class="flex items-center gap-2 pl-1.5 pr-3 py-1 bg-white border border-[#E8E2DC] hover:border-[#AD56C4] transition-colors shadow-xs" onclick="openAuthModal()">
+          <div class="w-7 h-7 bg-[#74318A] flex items-center justify-center text-xs font-bold text-white shadow-xs" id="user-avatar-char">
+            D
+          </div>
+          <span class="text-xs font-semibold text-[#1E2024] hidden sm:inline" id="user-name-display">Demo User</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ═════════════════════════════════════════════════════════════════════
+       2. MAIN BODY: SIDEBAR + CONTENT AREA
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div class="flex-1 flex max-w-[1600px] w-full mx-auto">
+
+    <!-- ── Left Category Sidebar (Slides 5 & 6) ── -->
+    <aside class="w-60 shrink-0 bg-[#FAF8F5] border-r border-[#E8E2DC] py-6 hidden md:block overflow-y-auto max-h-[calc(100vh-4rem)]">
+      <div class="px-5 mb-3 flex items-center justify-between">
+        <h3 class="text-[11px] font-bold uppercase tracking-wider text-[#717786]">Categories</h3>
+        <span class="text-[10px] font-bold text-[#74318A] bg-[#FFF0FC] border border-[#FF9CE9] px-1.5 py-0.5">Hydrangea</span>
+      </div>
+      <nav class="space-y-1 px-3 text-sm" id="sidebar-categories">
+        <button class="w-full flex items-center justify-between px-3 py-2 bg-[#FFEAE6] text-[#74318A] font-bold border-l-4 border-[#AD56C4] transition-colors text-left" onclick="selectCategory('')" id="cat-all">
+          <span>All Categories</span>
+          <span class="text-xs text-[#74318A] font-bold" id="cat-all-count">21</span>
+        </button>
+        <button class="w-full flex items-center justify-between px-3 py-2 text-[#4A4F59] hover:text-[#1E2024] hover:bg-[#FFEAE6]/60 transition-colors font-medium text-left" onclick="selectCategory('Fiction')">
+          <span>Fiction</span>
+        </button>
+        <button class="w-full flex items-center justify-between px-3 py-2 text-[#4A4F59] hover:text-[#1E2024] hover:bg-[#FFEAE6]/60 transition-colors font-medium text-left" onclick="selectCategory('Non-Fiction')">
+          <span>Non-Fiction</span>
+        </button>
+        <button class="w-full flex items-center justify-between px-3 py-2 text-[#4A4F59] hover:text-[#1E2024] hover:bg-[#FFEAE6]/60 transition-colors font-medium text-left" onclick="selectCategory('Science & Technology')">
+          <span>Science & Tech</span>
+        </button>
+        <button class="w-full flex items-center justify-between px-3 py-2 text-[#4A4F59] hover:text-[#1E2024] hover:bg-[#FFEAE6]/60 transition-colors font-medium text-left" onclick="selectCategory('Self-Help')">
+          <span>Self-Help</span>
+        </button>
+        <button class="w-full flex items-center justify-between px-3 py-2 text-[#4A4F59] hover:text-[#1E2024] hover:bg-[#FFEAE6]/60 transition-colors font-medium text-left" onclick="selectCategory('History')">
+          <span>History</span>
+        </button>
+      </nav>
+
+      <!-- Hydrangea Special Palette Card at Sidebar Bottom -->
+      <div class="m-3 p-4 bg-[#FFEAE6] border border-[#FFC2BA] text-left space-y-2 mt-8">
+        <div class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 bg-[#FF8DA1] inline-block"></span>
+          <span class="w-2.5 h-2.5 bg-[#FFC2BA] inline-block"></span>
+          <span class="w-2.5 h-2.5 bg-[#FF9CE9] inline-block"></span>
+          <span class="w-2.5 h-2.5 bg-[#AD56C4] inline-block"></span>
+        </div>
+        <h4 class="text-xs font-black text-[#1E2024] uppercase tracking-wide">Hydrangea Style</h4>
+        <p class="text-[11px] text-[#4A4F59] leading-relaxed">
+          Floral pastel minimalism with bold purple accents. Clean reading, intentional choices.
+        </p>
+      </div>
+    </aside>
+
+    <!-- ── Main Dynamic Views Container ── -->
+    <main class="flex-1 p-4 lg:p-8 overflow-y-auto">
+
+      <!-- ── Top Filter Toolbar (Slides 5 & 6) ── -->
+      <div id="filter-toolbar" class="mb-6 p-3.5 bg-white border border-[#E8E2DC] shadow-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <!-- Search Input -->
+          <div class="relative lg:col-span-2">
+            <svg class="w-4 h-4 text-[#8C92A0] absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input type="text" id="search-input" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] pl-10 pr-4 py-2 text-sm text-[#1E2024] placeholder-[#8C92A0] focus:outline-none focus:border-[#AD56C4] focus:bg-white transition-colors" placeholder="Search title, author, or keyword..." oninput="handleSearchDebounce()">
+          </div>
+
+          <!-- Language Selector -->
+          <div>
+            <select id="filter-language" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4] transition-colors">
+              <option value="All">Language: All</option>
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+            </select>
+          </div>
+
+          <!-- Format Selector -->
+          <div>
+            <select id="filter-format" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4] transition-colors">
+              <option value="All">Format (Paperback, eBook)</option>
+              <option value="Paperback">Paperback</option>
+              <option value="Hard Cover">Hard Cover</option>
+              <option value="eBook">eBook</option>
+            </select>
+          </div>
+
+          <!-- Publisher / Brand Selector -->
+          <div>
+            <select id="filter-publisher" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4] transition-colors" onchange="applyFilters()">
+              <option value="">All Publishers / Brands</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 1: CATALOGUE / BROWSE (Slides 5 & 6)
+      ══════════════════════════════════════════════════════════════════ -->
+      <section id="view-catalogue" class="view-pane active space-y-8">
+        
+        <!-- Promotional Banner (Rose Pink #FF8DA1 & Soft Peach #FFC2BA) -->
+        <div class="p-6 bg-gradient-to-r from-[#FF8DA1]/80 via-[#FFC2BA] to-[#FF9CE9]/70 border border-[#FF8DA1] shadow-xs text-[#1E2024] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#FF9CE9] text-[#1E2024] text-[10px] font-black uppercase tracking-wider mb-2 border border-white/60">
+              Hydrangea Collection
+            </div>
+            <h1 class="text-2xl font-black font-display text-[#1E2024] tracking-tight">
+              Floral Pastel Minimalism &bull; Curated for Deep Focus
+            </h1>
+            <p class="text-xs text-[#2D3139] font-medium mt-1 max-w-2xl">
+              Explore timeless reads in mindfulness, literature, and technology. Redeem your gift points at checkout for instant savings.
+            </p>
+          </div>
+          <button class="shrink-0 px-5 py-2.5 bg-[#74318A] hover:bg-[#5C236E] text-white text-xs font-bold shadow-sm transition-colors cursor-pointer" onclick="selectCategory('Non-Fiction')">
+            Browse Curations &rarr;
+          </button>
+        </div>
+
+        <!-- Section 1: Recommended For You (Peach Panel Background) -->
+        <div id="section-recommended" class="bg-[#FFEAE6] border border-[#FFC2BA] p-6 shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-[#FF9CE9] text-[#1E2024] text-[10px] font-black uppercase tracking-wider">Top Picks</span>
+                <h2 class="text-lg font-extrabold font-display text-[#1E2024]">Recommended for You</h2>
+              </div>
+              <p class="text-xs text-[#4A4F59] mt-0.5">Handpicked titles tailored to your order history and reading focus</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" id="grid-recommended">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Shelf 2: Bestsellers this Month / Main Grid (Neutral Grid) -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-extrabold font-display text-[#1E2024]" id="main-shelf-title">Bestsellers this Month</h2>
+              <p class="text-xs text-[#4A4F59] mt-0.5">Most sought-after titles across literature, technology, and philosophy</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-[#717786] font-semibold">Sort by:</span>
+              <select id="sort-select" class="bg-white border border-[#E8E2DC] text-xs px-3 py-1.5 text-[#1E2024] font-medium focus:outline-none focus:border-[#AD56C4]" onchange="handleSortChange()">
+                <option value="relevance">Relevance</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" id="grid-catalogue">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Section 3: New Launches (Peach Panel Background) -->
+        <div id="section-new-launches" class="bg-[#FFEAE6] border border-[#FFC2BA] p-6 shadow-xs">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-[#FF8DA1] text-[#1E2024] text-[10px] font-black uppercase tracking-wider">Fresh Arrivals</span>
+                <h2 class="text-lg font-extrabold font-display text-[#1E2024]">New Launches</h2>
+              </div>
+              <p class="text-xs text-[#4A4F59] mt-0.5">Recently added first editions and contemporary works</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5" id="grid-new-launches">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 2: PRODUCT DETAILS & RELATED READS (Slide 7 - image10.png)
+      ══════════════════════════════════════════════════════════════════ -->
+      <section id="view-details" class="view-pane space-y-8">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center gap-2 text-xs text-[#717786]">
+          <button class="hover:text-[#74318A] transition-colors font-medium" onclick="navigateTo('catalogue')">Home</button>
+          <span>/</span>
+          <span class="text-[#4A4F59]" id="crumbs-category">Non-Fiction</span>
+          <span>/</span>
+          <span class="text-[#1E2024] font-bold" id="crumbs-title">The Joy of Minimalism</span>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <!-- Left: Book Presentation with Dual Cover (Front & Back with Barcode), Metadata & Reviews (2 cols) -->
+          <div class="lg:col-span-2 space-y-6">
+            <div class="p-6 bg-white border border-[#E8E2DC] shadow-xs space-y-6">
+              
+              <!-- 3D Dual Cover Display (Slide 7 - image10.png - 2:3 Portrait Paperback Proportion) -->
+              <div class="flex flex-col sm:flex-row items-center justify-center gap-6 py-6 px-4 bg-[#FAF8F5] border border-[#E8E2DC]/80">
+                
+                <!-- Front Cover (Classic 2:3 Portrait Book Proportion) -->
+                <div class="book-cover-3d w-full max-w-[240px] sm:w-60 aspect-[2/3] p-5 flex flex-col justify-between text-white relative shadow-md shrink-0" id="details-cover-box">
+                  <div class="book-spine-crease"></div>
+                  <div class="book-pattern"></div>
+                  <div class="relative z-10 text-center pt-2">
+                    <span class="text-[9px] uppercase tracking-widest text-slate-200/90 font-bold block mb-1">BESTSELLER EDITION</span>
+                    <h3 class="font-extrabold text-base leading-tight drop-shadow-md font-display line-clamp-2" id="details-cover-title">Title</h3>
+                  </div>
+                  <div class="relative z-10 my-auto text-center">
+                    <div class="w-14 h-14 mx-auto bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center text-2xl shadow-inner">
+                      📖
+                    </div>
+                  </div>
+                  <div class="relative z-10 text-center pb-2">
+                    <p class="text-xs font-bold text-white drop-shadow truncate" id="details-cover-author">by Author</p>
+                    <p class="text-[10px] text-slate-200/80 mt-0.5">Hydrangea Specialist Library</p>
+                  </div>
+                </div>
+
+                <!-- Back Cover with Quote, Blurb Excerpt & ISBN-13 Barcode (Classic 2:3 Portrait Book Proportion) -->
+                <div class="book-cover-3d w-full max-w-[240px] sm:w-60 aspect-[2/3] p-4 flex flex-col justify-between text-white relative shadow-md shrink-0" id="details-back-cover-box">
+                  <div class="book-spine-crease" style="left: auto; right: 0; transform: scaleX(-1);"></div>
+                  <div class="book-pattern"></div>
+                  
+                  <div class="relative z-10 space-y-2.5 text-slate-100 text-left pt-1">
+                    <!-- Quote in italics with soft peach accent -->
+                    <div class="text-[11px] italic font-semibold text-[#FFC2BA] leading-snug drop-shadow" id="details-back-quote">
+                      "A refreshing path to clarity, focus, and mastery in a complex world."
+                    </div>
+                    <!-- Blurb excerpt -->
+                    <p class="text-[10px] text-slate-100/90 leading-relaxed line-clamp-3" id="details-back-blurb">
+                      Guides you through practical strategies to declutter your mind, space, and workflow with a calm, mindful approach.
+                    </p>
+                    <!-- About author snippet -->
+                    <div class="pt-1.5 border-t border-white/15">
+                      <span class="text-[9px] font-bold uppercase tracking-wider text-slate-200 block mb-0.5">About the Author</span>
+                      <p class="text-[9px] text-slate-100/80 line-clamp-2" id="details-back-author-bio">
+                        Advocate for intentional living whose work has helped thousands build sustainable habits for clarity.
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Colophon Logo + Realistic Barcode Card (Exact match to Slide 7 image10.png) -->
+                  <div class="relative z-10 pt-2 border-t border-white/15 flex items-end justify-between gap-2">
+                    <!-- Publisher Colophon -->
+                    <div class="text-left">
+                      <div class="w-6 h-6 bg-white/20 flex items-center justify-center text-xs font-black" id="details-back-colophon-letter">
+                        Q
+                      </div>
+                      <span class="text-[8px] text-slate-200 mt-0.5 block truncate max-w-[80px]" id="details-back-publisher">ABC Publishers</span>
+                    </div>
+
+                    <!-- ISBN Barcode Box -->
+                    <div class="bg-white text-slate-900 px-2.5 py-1 shadow-md text-center font-mono shrink-0">
+                      <div class="text-[7px] font-bold tracking-tight text-slate-700" id="details-barcode-isbn">ISBN 978-0-123456-78-9</div>
+                      <!-- Barcode lines SVG -->
+                      <svg class="h-6 w-24 mx-auto my-0.5" viewBox="0 0 120 30" preserveAspectRatio="none">
+                        <rect x="0" y="0" width="3" height="30" fill="#000"/>
+                        <rect x="5" y="0" width="1" height="30" fill="#000"/>
+                        <rect x="8" y="0" width="2" height="30" fill="#000"/>
+                        <rect x="13" y="0" width="4" height="30" fill="#000"/>
+                        <rect x="19" y="0" width="2" height="30" fill="#000"/>
+                        <rect x="23" y="0" width="1" height="30" fill="#000"/>
+                        <rect x="26" y="0" width="3" height="30" fill="#000"/>
+                        <rect x="31" y="0" width="2" height="30" fill="#000"/>
+                        <rect x="36" y="0" width="5" height="30" fill="#000"/>
+                        <rect x="43" y="0" width="1" height="30" fill="#000"/>
+                        <rect x="46" y="0" width="2" height="30" fill="#000"/>
+                        <rect x="50" y="0" width="3" height="30" fill="#000"/>
+                        <rect x="56" y="0" width="1" height="30" fill="#000"/>
+                        <rect x="59" y="0" width="4" height="30" fill="#000"/>
+                        <rect x="65" y="0" width="2" height="30" fill="#000"/>
+                        <rect x="69" y="0" width="1" height="30" fill="#000"/>
+                        <rect x="73" y="0" width="3" height="30" fill="#000"/>
+                        <rect x="78" y="0" width="2" height="30" fill="#000"/>
+                        <rect x="83" y="0" width="4" height="30" fill="#000"/>
+                        <rect x="89" y="0" width="1" height="30" fill="#000"/>
+                        <rect x="93" y="0" width="3" height="30" fill="#000"/>
+                        <rect x="98" y="0" width="2" height="30" fill="#000"/>
+                        <rect x="103" y="0" width="4" height="30" fill="#000"/>
+                        <rect x="110" y="0" width="1" height="30" fill="#000"/>
+                        <rect x="114" y="0" width="3" height="30" fill="#000"/>
+                        <rect x="118" y="0" width="2" height="30" fill="#000"/>
+                      </svg>
+                      <div class="text-[7px] text-slate-600 font-semibold tracking-widest" id="details-barcode-digits">9 780123 456789</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Metadata & CTAs Row -->
+              <div class="pt-5 border-t border-[#E8E2DC] space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h1 class="text-2xl font-black font-display text-[#1E2024] tracking-tight" id="details-title">
+                      Title
+                    </h1>
+                    <p class="text-sm font-bold text-[#74318A] mt-0.5" id="details-author">
+                      by Author
+                    </p>
+                    <p class="text-xs text-[#717786] mt-1">
+                      Published by: <span class="text-[#1E2024] font-medium" id="details-publisher">Publisher</span>
+                    </p>
+                  </div>
+                  <div class="text-left sm:text-right">
+                    <div class="text-3xl font-black text-[#1E2024]" id="details-price">₹0.00</div>
+                    <div class="text-xs text-[#74318A] font-bold bg-[#FFEAE6] px-2 py-0.5 border border-[#FFC2BA] mt-1 inline-block">
+                      Delivery by Mon, 21 Jul
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 bg-[#FAF8F5] border border-[#E8E2DC] text-[#717786] text-xs font-semibold">
+                    Paperback
+                  </span>
+                  <span class="px-2.5 py-0.5 bg-[#FFF0FC] border border-[#FF9CE9] text-[#74318A] text-xs font-bold" id="details-category-pill">
+                    Category
+                  </span>
+                  <span class="px-2.5 py-0.5 bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold" id="details-stock-status">
+                    In Stock
+                  </span>
+                </div>
+
+                <!-- Action Buttons (Slide 7) -->
+                <div class="flex items-center gap-3 pt-4 border-t border-[#E8E2DC]">
+                  <button class="flex-1 py-3 px-5 bg-[#74318A] hover:bg-[#5C236E] text-white font-bold text-sm shadow-xs flex items-center justify-center gap-2 transition-all active:scale-98 cursor-pointer" id="btn-details-add" onclick="addCurrentBookToCart()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <span>Add to Basket</span>
+                  </button>
+                  <button class="py-3 px-4 bg-[#FAF8F5] hover:bg-[#FFEAE6] text-[#1E2024] font-semibold text-sm border border-[#E8E2DC] transition-colors cursor-pointer" onclick="showToast('Saved to your wishlist', 'success')">
+                    🔖 Wishlist
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Social Proof Row (Peach Panel) -->
+            <div class="grid grid-cols-3 gap-4 p-4 bg-[#FFEAE6] border border-[#FFC2BA] text-center text-xs">
+              <div>
+                <span class="text-[#717786] block mb-0.5">Language</span>
+                <span class="font-bold text-[#1E2024] text-sm">English</span>
+              </div>
+              <div>
+                <span class="text-[#717786] block mb-0.5">Community Rating</span>
+                <span class="font-bold text-[#AD56C4] text-sm">★★★★★ 4.9</span>
+              </div>
+              <div>
+                <span class="text-[#717786] block mb-0.5">Demand</span>
+                <span class="font-bold text-[#1E2024] text-sm">145+ copies sold</span>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="p-6 bg-white border border-[#E8E2DC] shadow-xs">
+              <h3 class="text-base font-bold text-[#1E2024] mb-2">About this Book</h3>
+              <p class="text-sm text-[#4A4F59] leading-relaxed" id="details-description">
+                Description goes here...
+              </p>
+            </div>
+
+            <!-- About the Writer Section (Slide 7) -->
+            <div class="p-6 bg-white border border-[#E8E2DC] shadow-xs">
+              <h3 class="text-base font-bold text-[#1E2024] mb-4">About the writer</h3>
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-[#74318A] flex items-center justify-center text-lg text-white font-bold shrink-0 shadow-xs">
+                  ✍️
+                </div>
+                <div>
+                  <h4 class="font-bold text-[#1E2024]" id="writer-name">Author Name</h4>
+                  <p class="text-xs text-[#4A4F59] mt-1 leading-relaxed">
+                    Subject matter specialist and author known for clear insights and engaging narratives. Published across renowned publications and international bookstores.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reviews Form (Slide 7) -->
+            <div class="p-6 bg-white border border-[#E8E2DC] shadow-xs">
+              <h3 class="text-base font-bold text-[#1E2024] mb-3">Customer Reviews</h3>
+              <div class="flex items-center gap-2 mb-3">
+                <div class="flex text-[#AD56C4] text-lg cursor-pointer">★★★★★</div>
+                <span class="text-xs text-[#717786]">Leave Your Review</span>
+              </div>
+              <textarea class="w-full bg-[#FAF8F5] border border-[#E8E2DC] p-3 text-sm text-[#1E2024] placeholder-[#8C92A0] focus:outline-none focus:border-[#AD56C4] focus:bg-white transition-colors h-20 resize-none mb-3" placeholder="Share your reading experience..."></textarea>
+              <button class="px-4 py-2 bg-[#74318A] hover:bg-[#5C236E] text-white text-xs font-bold transition-colors cursor-pointer" onclick="showToast('Thank you for submitting your review!', 'success')">
+                Submit Review
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Related Reads Shelf (Peach Panel Background) -->
+          <div>
+            <div class="sticky top-24 p-5 bg-[#FFEAE6] border border-[#FFC2BA] shadow-xs space-y-4">
+              <h3 class="text-base font-black font-display text-[#1E2024] flex items-center justify-between">
+                <span>Related Reads</span>
+                <span class="text-[11px] text-[#74318A] font-bold">Same Category</span>
+              </h3>
+              <div class="space-y-3.5" id="details-related-reads">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 3: SHOPPING CART & ADDRESS CHECKOUT (Slide 8 - image11.png)
+      ══════════════════════════════════════════════════════════════════ -->
+      <section id="view-cart" class="view-pane space-y-8">
+        
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-black font-display text-[#1E2024]">Shopping Cart & Checkout</h1>
+            <p class="text-xs text-[#717786] mt-1">Review your basket, select shipping address, and apply gift points</p>
+          </div>
+          <button class="text-xs font-bold text-[#74318A] hover:underline" onclick="navigateTo('catalogue')">
+            + Continue Shopping
+          </button>
+        </div>
+
+        <div id="cart-non-empty" class="space-y-8">
+          
+          <!-- Top Shelf: Cart Items Horizontal Cards -->
+          <div class="p-6 bg-white border border-[#E8E2DC] shadow-xs">
+            <h2 class="text-base font-bold text-[#1E2024] mb-4 flex items-center justify-between">
+              <span>Items in Basket (<span id="cart-item-count-label">0</span>)</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="cart-items-shelf">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Two-Column Checkout Grid (Slide 8) -->
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            
+            <!-- Left Box: Address Selection & Form (3 cols) -->
+            <div class="lg:col-span-3 p-6 bg-white border border-[#E8E2DC] shadow-xs space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-[#E8E2DC]">
+                <h3 class="text-base font-bold text-[#1E2024] flex items-center gap-2">
+                  <span>📍</span>
+                  <span>Delivery Address</span>
+                </h3>
+                <div class="flex items-center gap-2">
+                  <input type="checkbox" id="chk-use-saved" checked onchange="toggleSavedAddress(this.checked)" class="text-[#74318A] focus:ring-[#AD56C4]">
+                  <label for="chk-use-saved" class="text-xs text-[#4A4F59] font-medium cursor-pointer">Use Saved Address</label>
+                </div>
+              </div>
+
+              <!-- Saved Address Dropdown -->
+              <div>
+                <label class="block text-xs font-medium text-[#717786] mb-1">Select Delivery Destination</label>
+                <select id="saved-address-dropdown" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" onchange="handleAddressSelect(this.value)">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <!-- Form Fields matching Slide 8 wireframe -->
+              <div class="grid grid-cols-2 gap-3 pt-2">
+                <div>
+                  <label class="block text-[11px] text-[#717786] mb-1">First Name</label>
+                  <input type="text" id="addr-first-name" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="Demo">
+                </div>
+                <div>
+                  <label class="block text-[11px] text-[#717786] mb-1">Last Name</label>
+                  <input type="text" id="addr-last-name" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="User">
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] text-[#717786] mb-1">Street Address</label>
+                <input type="text" id="addr-line" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="12 MG Road, Apt 4B">
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] text-[#717786] mb-1">City</label>
+                  <input type="text" id="addr-city" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="Bengaluru">
+                </div>
+                <div>
+                  <label class="block text-[11px] text-[#717786] mb-1">Postal Code / PIN</label>
+                  <input type="text" id="addr-pin" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="560001">
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] text-[#717786] mb-1">State</label>
+                  <input type="text" id="addr-state" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="Karnataka">
+                </div>
+                <div>
+                  <label class="block text-[11px] text-[#717786] mb-1">Country</label>
+                  <input type="text" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-sm text-[#717786] focus:outline-none" value="India" readonly>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Box: Grand Total Breakdown (Peach Panel Background) (Slide 8) -->
+            <div class="lg:col-span-2 p-6 bg-[#FFEAE6] border border-[#FFC2BA] shadow-xs flex flex-col justify-between">
+              <div>
+                <h3 class="text-base font-bold text-[#1E2024] pb-3 border-b border-[#FFC2BA] mb-4 flex items-center justify-between">
+                  <span>Grand Total</span>
+                  <span class="text-xs text-[#717786] font-medium">Physical Delivery</span>
+                </h3>
+
+                <div class="space-y-3 text-sm">
+                  <div class="flex justify-between text-[#4A4F59]">
+                    <span>Price (<span id="calc-qty-label">0</span> items)</span>
+                    <span class="font-bold text-[#1E2024]" id="calc-subtotal">₹0.00</span>
+                  </div>
+                  <div class="flex justify-between text-[#717786] text-xs">
+                    <span>Tax & Regulatory</span>
+                    <span id="calc-tax">₹0.00</span>
+                  </div>
+                  <div class="flex justify-between text-[#4A4F59]">
+                    <span>Delivery Charges</span>
+                    <span class="text-emerald-700 font-bold">Free</span>
+                  </div>
+
+                  <!-- Gift Points / Coupon Input matching Slide 8 wireframe -->
+                  <div class="pt-3 pb-2 border-t border-[#FFC2BA]">
+                    <label class="block text-xs font-semibold text-[#1E2024] mb-1.5 flex items-center justify-between">
+                      <span>Redeem Gift Points (1 pt = ₹1)</span>
+                      <span class="text-[11px] text-[#74318A] font-bold">Bal: <span id="checkout-avail-pts">500</span> pts</span>
+                    </label>
+                    <div class="flex gap-2">
+                      <input type="number" id="redeem-points-input" class="flex-1 bg-white border border-[#E8E2DC] px-3 py-1.5 text-sm text-[#1E2024] font-bold focus:outline-none focus:border-[#AD56C4]" placeholder="Points" min="0" value="0" onchange="applyPointsChange(this.value)">
+                      <button class="px-4 py-1.5 bg-[#74318A] hover:bg-[#5C236E] text-white font-bold text-xs transition-colors cursor-pointer" onclick="applyPoints()">
+                        Apply
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-between text-[#74318A] font-bold text-sm">
+                    <span>Points Discount</span>
+                    <span id="calc-discount">-₹0.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-[#FFC2BA] mt-6">
+                <div class="flex justify-between items-baseline mb-4">
+                  <span class="text-sm font-semibold text-[#4A4F59]">Total Amount</span>
+                  <span class="text-2xl font-black text-[#1E2024]" id="calc-final-total">₹0.00</span>
+                </div>
+                <button class="w-full py-3.5 px-4 bg-[#74318A] hover:bg-[#5C236E] text-white font-bold text-base shadow-sm flex items-center justify-center gap-2 transition-all active:scale-98 cursor-pointer" onclick="openPaymentModal()">
+                  <span>Pay Now</span>
+                  <span>💳</span>
+                </button>
+                <p class="text-[11px] text-[#717786] text-center mt-2">
+                  🔒 Encrypted transaction &bull; Simulated gateway
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Empty Cart Notice -->
+        <div id="cart-empty-notice" class="hidden p-12 bg-white border border-[#E8E2DC] text-center max-w-lg mx-auto shadow-xs">
+          <div class="w-16 h-16 bg-[#FFEAE6] text-[#74318A] flex items-center justify-center text-3xl mx-auto mb-4 border border-[#FFC2BA]">🛒</div>
+          <h2 class="text-xl font-black text-[#1E2024]">Your Basket is Empty</h2>
+          <p class="text-xs text-[#717786] mt-1 mb-6">Discover our curated catalogue and add captivating reads to your basket.</p>
+          <button class="px-6 py-2.5 bg-[#74318A] hover:bg-[#5C236E] text-white font-bold text-sm shadow-xs transition-colors cursor-pointer" onclick="navigateTo('catalogue')">
+            Explore Catalogue
+          </button>
+        </div>
+
+      </section>
+
+
+      <!-- ═════════════════════════════════════════════════════════════════
+           VIEW 4: ORDER HISTORY & BUY IN AGAIN (Slides 3 & 6)
+      ══════════════════════════════════════════════════════════════════ -->
+      <section id="view-orders" class="view-pane space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-black font-display text-[#1E2024]">Order History</h1>
+            <p class="text-xs text-[#717786] mt-1">Review purchase snapshots, track status, and repurchase favorites</p>
+          </div>
+        </div>
+
+        <div id="orders-container" class="space-y-4">
+          <!-- Rendered by JS -->
+        </div>
+
+        <div id="orders-empty-msg" class="hidden p-12 bg-white border border-[#E8E2DC] text-center max-w-lg mx-auto shadow-xs">
+          <div class="w-16 h-16 bg-[#FFEAE6] text-[#74318A] flex items-center justify-center text-3xl mx-auto mb-4 border border-[#FFC2BA]">📦</div>
+          <h2 class="text-xl font-black text-[#1E2024]">No Previous Orders</h2>
+          <p class="text-xs text-[#717786] mt-1 mb-6">Completed purchases and price snapshots will be permanently stored here.</p>
+          <button class="px-6 py-2.5 bg-[#74318A] hover:bg-[#5C236E] text-white font-bold text-sm shadow-xs transition-colors cursor-pointer" onclick="navigateTo('catalogue')">
+            Start Shopping
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- ═════════════════════════════════════════════════════════════════════
+       3. MODAL: COMPLETE PAYMENT (Slide 9 - image12.png)
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div id="modal-payment" class="fixed inset-0 z-50 bg-[#1E2024]/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white border border-[#E8E2DC] shadow-2xl max-w-2xl w-full overflow-hidden animate-check-pop">
+      
+      <!-- Header (Slide 9) -->
+      <div class="px-6 py-4 border-b border-[#FFC2BA] flex items-center justify-between bg-[#FFEAE6]">
+        <h3 class="text-base font-bold text-[#1E2024]">Complete Payment</h3>
+        <div class="text-base font-extrabold text-[#1E2024]">
+          Payable Amount: <span class="text-[#74318A] font-black" id="payment-modal-amount">₹580.00</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-4 min-h-[300px]">
+        <!-- Vertical Payment Method Tabs (Slide 9) -->
+        <div class="sm:col-span-1 bg-[#FAF8F5] border-r border-[#E8E2DC] p-2 space-y-1">
+          <button id="tab-cc" class="w-full text-left px-3 py-2.5 text-xs font-bold text-[#74318A] bg-[#FFEAE6] border-l-4 border-[#AD56C4] shadow-xs" onclick="selectPayTab('CREDIT_CARD', this)">
+            💳 Credit Card
+          </button>
+          <button id="tab-dc" class="w-full text-left px-3 py-2.5 text-xs font-semibold text-[#4A4F59] hover:text-[#1E2024] hover:bg-white transition-colors" onclick="selectPayTab('DEBIT_CARD', this)">
+            🏦 Debit Card
+          </button>
+          <button class="w-full text-left px-3 py-2.5 text-xs font-semibold text-[#4A4F59] hover:text-[#1E2024] hover:bg-white transition-colors" onclick="selectPayTab('UPI', this)">
+            ⚡ UPI
+          </button>
+          <button class="w-full text-left px-3 py-2.5 text-xs font-semibold text-[#4A4F59] hover:text-[#1E2024] hover:bg-white transition-colors" onclick="selectPayTab('WALLET', this)">
+            👛 Wallet
+          </button>
+        </div>
+
+        <!-- Form Content (Slide 9) -->
+        <div class="sm:col-span-3 p-6 flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-semibold text-[#717786] mb-1">Card Number</label>
+                <input type="text" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-xs font-mono text-[#1E2024]" value="XXXX-XXXX-XXXX-XXXX" readonly>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-[#717786] mb-1">Name on Card</label>
+                <input type="text" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-xs text-[#1E2024]" value="Demo User" readonly>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] font-semibold text-[#717786] mb-1">CVV</label>
+                <input type="text" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-xs font-mono text-[#1E2024]" value="XXX" readonly>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-[#717786] mb-1">Date of Expiry</label>
+                <input type="text" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-2 text-xs text-[#1E2024]" value="12/28" readonly>
+              </div>
+            </div>
+
+            <!-- Simulation Toggle Box -->
+            <div class="p-3 bg-[#FAF8F5] border border-[#E8E2DC]">
+              <label class="block text-[11px] font-bold text-[#74318A] mb-1">
+                ⚙️ Simulation Evaluation Mode:
+              </label>
+              <select id="payment-outcome-select" class="w-full bg-white border border-[#E8E2DC] px-2.5 py-1.5 text-xs text-[#1E2024] focus:outline-none">
+                <option value="APPROVED" selected>APPROVED (Confirm order & award reward points)</option>
+                <option value="DECLINED">DECLINED (Test decline handling & points restoration)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-6 border-t border-[#E8E2DC] mt-6">
+            <button class="px-4 py-2 bg-[#FAF8F5] text-[#4A4F59] hover:text-[#1E2024] text-xs font-semibold border border-[#E8E2DC] cursor-pointer" onclick="closePaymentModal()">
+              Cancel
+            </button>
+            <button class="px-6 py-2.5 bg-[#74318A] hover:bg-[#5C236E] text-white font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer" id="btn-execute-payment" onclick="executePaymentTransaction()">
+              <span>Pay Now</span>
+              <span>💳</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═════════════════════════════════════════════════════════════════════
+       4. MODAL: PURCHASE CONFIRMATION (Slide 10 - image13.png)
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div id="modal-confirmation" class="fixed inset-0 z-50 bg-[#1E2024]/70 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white border border-[#E8E2DC] shadow-2xl max-w-xl w-full p-8 text-center animate-check-pop">
+      
+      <!-- Checkmark Circle in Hydrangea Floral Accent -->
+      <div class="w-16 h-16 bg-[#FFEAE6] border-2 border-[#AD56C4] flex items-center justify-center text-[#74318A] text-2xl mx-auto mb-4 font-black" id="confirm-icon">
+        ✓
+      </div>
+
+      <h2 class="text-xl font-black text-[#1E2024] font-display" id="confirm-heading">
+        Your purchase of the following reads is successful
+      </h2>
+      <p class="text-xs text-[#717786] mt-1 mb-6">
+        Order snapshot saved. Delivery dispatched to your selected address.
+      </p>
+
+      <!-- Side-by-Side Purchased Reads Cards (Slide 10) -->
+      <div class="flex flex-wrap items-center justify-center gap-4 my-6" id="confirm-books-container">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button class="w-full sm:w-auto px-8 py-3 bg-[#74318A] hover:bg-[#5C236E] text-white font-bold text-sm shadow-sm transition-all cursor-pointer" onclick="continueShopping()">
+          Continue your Shopping 📖
+        </button>
+        <button class="w-full sm:w-auto px-6 py-3 bg-[#FAF8F5] hover:bg-[#FFEAE6] text-[#1E2024] font-semibold text-sm border border-[#E8E2DC] transition-colors cursor-pointer" onclick="viewMyOrdersAfterConfirm()">
+          View in My Orders 📦
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═════════════════════════════════════════════════════════════════════
+       5. MODAL: ACCOUNT & AUTH
+  ══════════════════════════════════════════════════════════════════════ -->
+  <div id="modal-auth" class="fixed inset-0 z-50 bg-[#1E2024]/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white border border-[#E8E2DC] shadow-2xl max-w-sm w-full p-6">
+      <div class="flex items-center justify-between pb-3 border-b border-[#E8E2DC] mb-4">
+        <h3 class="text-sm font-bold text-[#1E2024]">Account Authentication</h3>
+        <button onclick="closeAuthModal()" class="text-[#717786] hover:text-[#1E2024] text-lg cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Quick Demo Sign-In Box (Peach Accent) -->
+      <div class="p-3.5 bg-[#FFEAE6] border border-[#FFC2BA] mb-4">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-[#74318A]">⚡ 1-Click Demo Login</span>
+          <span class="text-[11px] text-[#74318A] font-bold">🪙 500 Pts</span>
+        </div>
+        <p class="text-[11px] text-[#4A4F59] mt-1 mb-2.5">
+          Instantly load seeded Demo User with 500 Gift Points.
+        </p>
+        <button class="w-full py-2 bg-[#74318A] hover:bg-[#5C236E] text-white text-xs font-bold transition-colors cursor-pointer" onclick="loginDemo()">
+          Sign In as Demo User
+        </button>
+      </div>
+
+      <div class="text-[11px] text-[#717786] uppercase tracking-wider text-center my-3">— or custom credentials —</div>
+
+      <form onsubmit="handleAuthSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-[11px] text-[#717786] mb-1">Email</label>
+          <input type="email" id="auth-email-input" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-1.5 text-xs text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="demo@ebookstore.com" required>
+        </div>
+        <div>
+          <label class="block text-[11px] text-[#717786] mb-1">Password</label>
+          <input type="password" id="auth-pass-input" class="w-full bg-[#FAF8F5] border border-[#E8E2DC] px-3 py-1.5 text-xs text-[#1E2024] focus:outline-none focus:border-[#AD56C4]" value="demo1234" required>
+        </div>
+        <button type="submit" class="w-full py-2 bg-[#FAF8F5] hover:bg-[#FFEAE6] text-[#1E2024] text-xs font-bold border border-[#E8E2DC] transition-colors cursor-pointer">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ── Toast Alerts Container ── -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ── Footer ── -->
+  <footer class="border-t border-[#E8E2DC] bg-[#FAF8F5] py-6 text-center text-xs text-[#717786]">
+    <div class="max-w-[1600px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-[#74318A] font-bold">Book Worm</span>
+        <span>&bull;</span>
+        <span>Hydrangea Floral Pastel Edition &copy; 2026</span>
+      </div>
+      <div>Simulated Card & Loyalty Points Processing Enabled</div>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
