@@ -1,0 +1,13 @@
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+.mvn/wrapper/maven-wrapper.jar
